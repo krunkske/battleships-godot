@@ -1,0 +1,30 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5t8qvex1tfxf"]
+
+[ext_resource type="Theme" uid="uid://bmq24vi5uw0mq" path="res://assets/themes/default_theme.tres" id="1_gbuir"]
+
+[node name="top_gui" type="Control"]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+size_flags_vertical = 0
+
+[node name="host_or_client" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme = ExtResource("1_gbuir")
+theme_override_font_sizes/font_size = 24
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme = ExtResource("1_gbuir")
+text = "
+"

@@ -1,0 +1,105 @@
+[gd_scene load_steps=3 format=3 uid="uid://db6nesat63ie2"]
+
+[ext_resource type="Theme" uid="uid://bmq24vi5uw0mq" path="res://assets/themes/default_theme.tres" id="1_pdlql"]
+[ext_resource type="Script" path="res://scripts/boat_select_menu.gd" id="1_ukue6"]
+
+[node name="boat_select_menu" type="Control"]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+grow_horizontal = 0
+script = ExtResource("1_ukue6")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -131.0
+offset_bottom = 136.0
+grow_horizontal = 0
+
+[node name="HSeparator2" type="HSeparator" parent="GridContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="small_amount" type="Label" parent="GridContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_pdlql")
+text = "1"
+
+[node name="small_boat" type="Button" parent="GridContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_pdlql")
+text = "small boat
+"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="medium_amount" type="Label" parent="GridContainer/HBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("1_pdlql")
+text = "2
+"
+
+[node name="medium_boat" type="Button" parent="GridContainer/HBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("1_pdlql")
+text = "medium boat
+"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="large_amount" type="Label" parent="GridContainer/HBoxContainer3"]
+layout_mode = 2
+theme = ExtResource("1_pdlql")
+text = "1
+"
+
+[node name="large_boat" type="Button" parent="GridContainer/HBoxContainer3"]
+layout_mode = 2
+theme = ExtResource("1_pdlql")
+text = "large boat"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="extra_large_amount" type="Label" parent="GridContainer/HBoxContainer4"]
+layout_mode = 2
+theme = ExtResource("1_pdlql")
+text = "1
+"
+
+[node name="extra_large_boat" type="Button" parent="GridContainer/HBoxContainer4"]
+layout_mode = 2
+theme = ExtResource("1_pdlql")
+text = "extra large boat
+"
+
+[node name="HSeparator" type="HSeparator" parent="GridContainer"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="ready" type="Button" parent="GridContainer"]
+layout_mode = 2
+theme = ExtResource("1_pdlql")
+text = "Ready
+"
+
+[connection signal="pressed" from="GridContainer/HBoxContainer/small_boat" to="." method="_on_small_boat_pressed"]
+[connection signal="pressed" from="GridContainer/HBoxContainer2/medium_boat" to="." method="_on_medium_boat_pressed"]
+[connection signal="pressed" from="GridContainer/HBoxContainer3/large_boat" to="." method="_on_large_boat_pressed"]
+[connection signal="pressed" from="GridContainer/HBoxContainer4/extra_large_boat" to="." method="_on_extra_large_boat_pressed"]
+[connection signal="pressed" from="GridContainer/ready" to="." method="_on_ready_pressed"]
