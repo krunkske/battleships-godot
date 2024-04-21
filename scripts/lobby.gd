@@ -1,10 +1,12 @@
 extends Node
 
 var PORT = 1026
-const MAX_CLIENTS = 1
+const MAX_CLIENTS = 3
 var client = false
 
 var peer = null
+
+var connected = 0
 
 func _ready():
 	multiplayer.peer_connected.connect(self._player_connected)
@@ -38,7 +40,7 @@ func create_server():
 func _player_connected(_id):
 	print(str(_id) + " connected")
 	_register_player.rpc_id(_id, aLoad.playerName)
-	if multiplayer.is_server():
+	if multiplayer.is_server() and connected == 4:
 		aLoad.main.start_pregame.rpc()
 
 func _player_disconnected(_id):
@@ -47,10 +49,12 @@ func _player_disconnected(_id):
 func _connected_fail():
 	print("connection failed.")
 	multiplayer.multiplayer_peer = null
+	aLoad.reset()
 
 func _server_disconnected():
 	print("server disconnected.")
 	multiplayer.multiplayer_peer = null
+	aLoad.reset()
 
 @rpc("any_peer", "reliable")
 func _register_player(username):

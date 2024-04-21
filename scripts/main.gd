@@ -55,16 +55,16 @@ func preview(cell, num):
 		clear_layer(3, "you")
 		match aLoad.selected_boat:
 			"small":
-				place_boat(cell,2, true)
+				small_boat(cell, 3)
 			
 			"medium":
-				place_boat(cell,3, true)
+				medium_boat(cell, 3)
 			
 			"large":
-				place_boat(cell,4, true)
+				large_boat(cell, 3)
 			
 			"extra_large":
-				place_boat(cell, 5, true)
+				extra_large_boat(cell, 3)
 	elif num == 2:
 		clear_layer(3, "opponent")
 		$opponent.set_cell(3 , Vector2i(cell.x, cell.y), 1, Vector2i(1,0))
@@ -83,27 +83,27 @@ func add_boat(cell):
 	match aLoad.selected_boat:
 		"small":
 			if not aLoad.boats_placed[0] > 0:
-				if place_boat(cell,2, false):
+				if small_boat(cell, 1):
 					aLoad.boats_placed[0] += 1
-					aLoad.boat_select_GUI.set_value("small", -1)
+					aLoad.boat_select_GUI.set_value("small", 0)
 		
 		"medium":
 			if not aLoad.boats_placed[1] > 1:
-				if place_boat(cell,3, false):
+				if medium_boat(cell, 1):
 					aLoad.boats_placed[1] += 1
-					aLoad.boat_select_GUI.set_value("medium", -1)
+					aLoad.boat_select_GUI.set_value("medium", 2 - aLoad.boats_placed[1])
 		
 		"large":
 			if not aLoad.boats_placed[2] > 0:
-				if place_boat(cell,4, false):
+				if large_boat(cell, 1):
 					aLoad.boats_placed[2] += 1
-					aLoad.boat_select_GUI.set_value("large", -1)
+					aLoad.boat_select_GUI.set_value("large", 0)
 		
 		"extra_large":
 			if not aLoad.boats_placed[3] > 0:
-				if place_boat(cell, 5, false):
+				if extra_large_boat(cell, 1):
 					aLoad.boats_placed[3] += 1
-					aLoad.boat_select_GUI.set_value("extra_large", -1)
+					aLoad.boat_select_GUI.set_value("extra_large", 0)
 
 func remove_boat(cell):
 	var count = 0
@@ -118,8 +118,8 @@ func remove_boat(cell):
 						aLoad.boat_select_GUI.set_value("small", 1)
 						aLoad.boats_placed[0] -= 1
 					3:
-						aLoad.boat_select_GUI.set_value("medium", 1)
 						aLoad.boats_placed[1] -= 1
+						aLoad.boat_select_GUI.set_value("medium",2 - aLoad.boats_placed[1])
 					4:
 						aLoad.boat_select_GUI.set_value("large", 1)
 						aLoad.boats_placed[2] -= 1
@@ -186,6 +186,109 @@ func place_boat(cell, length, preview):
 	
 	return true
 
+func small_boat(cell, layer):
+	var boatcells = []
+	if direction == "HORIZONTAL":
+		for i in range(0, 2): #last number not included
+			if not cell_valid(Vector2i(cell.x + i, cell.y)):
+				return false
+			else:
+				boatcells.append(Vector2i(cell.x + i, cell.y))
+		$you.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(0,0))
+		$you.set_cell(layer, Vector2i(cell.x + 1, cell.y), 0, Vector2i(2,0))
+	elif direction == "VERTICAL":
+		for i in range(0, 2):
+			if not cell_valid(Vector2i(cell.x, cell.y + i)):
+				return false
+			else:
+				boatcells.append(Vector2i(cell.x, cell.y + i))
+		$you.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(0,1))
+		$you.set_cell(layer, Vector2i(cell.x, cell.y + 1), 0, Vector2i(2,1))
+	
+	if layer == 1:
+		aLoad.boats.append(boatcells)
+	return true
+
+func medium_boat(cell, layer):
+	var boatcells = []
+	if direction == "HORIZONTAL":
+		for i in range(-1, 2):
+			if not cell_valid(Vector2i(cell.x + i, cell.y)):
+				return false
+			else:
+				boatcells.append(Vector2i(cell.x + i, cell.y))
+		$you.set_cell(layer, Vector2i(cell.x - 1, cell.y), 0, Vector2i(0,0))
+		$you.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(1,0))
+		$you.set_cell(layer, Vector2i(cell.x + 1, cell.y), 0, Vector2i(2,0))
+	elif direction == "VERTICAL":
+		for i in range(-1, 2):
+			if not cell_valid(Vector2i(cell.x, cell.y + i)):
+				return false
+			else:
+				boatcells.append(Vector2i(cell.x, cell.y + i))
+		$you.set_cell(layer, Vector2i(cell.x, cell.y - 1), 0, Vector2i(0,1))
+		$you.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(1,1))
+		$you.set_cell(layer, Vector2i(cell.x, cell.y + 1), 0, Vector2i(2,1))
+	
+	if layer == 1:
+		aLoad.boats.append(boatcells)
+	return true
+
+func large_boat(cell, layer):
+	var boatcells = []
+	if direction == "HORIZONTAL":
+		for i in range(-1, 3):
+			if not cell_valid(Vector2i(cell.x + i, cell.y)):
+				return false
+			else:
+				boatcells.append(Vector2i(cell.x + i, cell.y))
+		$you.set_cell(layer, Vector2i(cell.x - 1, cell.y), 0, Vector2i(0,0))
+		$you.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(1,0))
+		$you.set_cell(layer, Vector2i(cell.x + 1, cell.y), 0, Vector2i(1,0))
+		$you.set_cell(layer, Vector2i(cell.x + 2, cell.y), 0, Vector2i(2,0))
+	elif direction == "VERTICAL":
+		for i in range(-1, 3):
+			if not cell_valid(Vector2i(cell.x, cell.y + i)):
+				return false
+			else:
+				boatcells.append(Vector2i(cell.x, cell.y + i))
+		$you.set_cell(layer, Vector2i(cell.x, cell.y - 1), 0, Vector2i(0,1))
+		$you.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(1,1))
+		$you.set_cell(layer, Vector2i(cell.x, cell.y + 1), 0, Vector2i(1,1))
+		$you.set_cell(layer, Vector2i(cell.x, cell.y + 2), 0, Vector2i(2,1))
+	
+	if layer == 1:
+		aLoad.boats.append(boatcells)
+	return true
+
+func extra_large_boat(cell, layer):
+	var boatcells = []
+	if direction == "HORIZONTAL":
+		for i in range(-2, 3):
+			if not cell_valid(Vector2i(cell.x + i, cell.y)):
+				return false
+			else:
+				boatcells.append(Vector2i(cell.x + i, cell.y))
+		$you.set_cell(layer, Vector2i(cell.x - 2, cell.y), 0, Vector2i(0,0))
+		$you.set_cell(layer, Vector2i(cell.x - 1, cell.y), 0, Vector2i(1,0))
+		$you.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(1,0))
+		$you.set_cell(layer, Vector2i(cell.x + 1, cell.y), 0, Vector2i(1,0))
+		$you.set_cell(layer, Vector2i(cell.x + 2, cell.y), 0, Vector2i(2,0))
+	elif direction == "VERTICAL":
+		for i in range(-2, 3):
+			if not cell_valid(Vector2i(cell.x, cell.y + i)):
+				return false
+			else:
+				boatcells.append(Vector2i(cell.x, cell.y + i))
+		$you.set_cell(layer, Vector2i(cell.x, cell.y - 2), 0, Vector2i(0,1))
+		$you.set_cell(layer, Vector2i(cell.x, cell.y - 1), 0, Vector2i(1,1))
+		$you.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(1,1))
+		$you.set_cell(layer, Vector2i(cell.x, cell.y + 1), 0, Vector2i(1,1))
+		$you.set_cell(layer, Vector2i(cell.x, cell.y + 2), 0, Vector2i(2,1))
+	
+	if layer == 1:
+		aLoad.boats.append(boatcells)
+	return true
 
 @rpc("any_peer", "call_local", "reliable")
 func start_pregame():

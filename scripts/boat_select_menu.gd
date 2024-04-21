@@ -40,10 +40,10 @@ func _on_ready_pressed():
 func set_value(textBox, value):
 	match textBox:
 		"small":
-			$GridContainer/HBoxContainer/small_amount.text = str(int($GridContainer/HBoxContainer/small_amount.text) + value)
+			$GridContainer/HBoxContainer/small_amount.text = str(value)
 		"medium":
-			$GridContainer/HBoxContainer2/medium_amount.text = str(int($GridContainer/HBoxContainer2/medium_amount.text) + value)
+			$GridContainer/HBoxContainer2/medium_amount.text = str(value)
 		"large":
-			$GridContainer/HBoxContainer3/large_amount.text = str(int($GridContainer/HBoxContainer3/large_amount.text) + value)
+			$GridContainer/HBoxContainer3/large_amount.text = str(value)
 		"extra_large":
-			$GridContainer/HBoxContainer4/extra_large_amount.text = str(int($GridContainer/HBoxContainer4/extra_large_amount.text) + value)
+			$GridContainer/HBoxContainer4/extra_large_amount.text = str(value)
