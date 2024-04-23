@@ -27,13 +27,11 @@ func _on_extra_large_boat_pressed():
 func _on_ready_pressed():
 	if aLoad.boats_placed == [1,2,1,1]:
 		self.set_visible(false)
-		aLoad.top_gui.get_node("Label").set_text("Waiting for opponent")
-		if multiplayer.is_server():
-			print("server")
-			Lobby.player_is_ready()
+		aLoad.top_gui.get_node("Label").set_text("Waiting for opponents")
+		if not multiplayer.is_server():
+			Lobby.is_ready.rpc_id(1, aLoad.yourPosition)
 		else:
-			print("client")
-			Lobby.opponent_is_ready.rpc_id(1)
+			Lobby.is_ready(aLoad.yourPosition)
 	else:
 		aLoad.top_gui.get_node("Label").set_text("You have not placed all your boats")
 

@@ -13,7 +13,7 @@ func _ready():
 func _process(delta):
 	if Input.is_action_just_pressed("LmouseButton"):
 		if aLoad.gameloop == "pregame":
-			add_boat(aLoad.you.local_to_map(aLoad.you.get_local_mouse_position()))
+			add_boat(aLoad.yourTilemap.local_to_map(aLoad.yourTilemap.get_local_mouse_position()))
 		elif aLoad.gameloop == "game" and aLoad.user_turn == multiplayer.get_unique_id():
 			var place = aLoad.opponent.local_to_map(aLoad.opponent.get_local_mouse_position())
 			if $opponent.get_cell_source_id(2, place) == -1:
@@ -22,7 +22,7 @@ func _process(delta):
 					clear_layer(3, "opponent")
 	
 	if Input.is_action_just_pressed("RmouseButton") and aLoad.gameloop == "pregame" and aLoad.youReady != true:
-		remove_boat(aLoad.you.local_to_map(aLoad.you.get_local_mouse_position()))
+		remove_boat(aLoad.yourTilemap.local_to_map(aLoad.yourTilemap.get_local_mouse_position()))
 	
 	if Input.is_action_just_pressed("change_direction"):
 		if direction == "HORIZONTAL":
@@ -30,15 +30,15 @@ func _process(delta):
 		else:
 			direction = "HORIZONTAL"
 		if aLoad.gameloop == "pregame":
-			current_hovered_cell = aLoad.you.local_to_map(aLoad.you.get_local_mouse_position())
+			current_hovered_cell = aLoad.yourTilemap.local_to_map(aLoad.yourTilemap.get_local_mouse_position())
 			last_hovered_cell = current_hovered_cell
 			preview(current_hovered_cell, 1)
-	
 	if aLoad.gameloop == "pregame":
-		current_hovered_cell = aLoad.you.local_to_map(aLoad.you.get_local_mouse_position())
+		current_hovered_cell = aLoad.yourTilemap.local_to_map(aLoad.yourTilemap.get_local_mouse_position())
 		if current_hovered_cell != last_hovered_cell:
 			last_hovered_cell = current_hovered_cell
 			preview(current_hovered_cell, 1)
+	
 	elif aLoad.gameloop == "game" and aLoad.user_turn == multiplayer.get_unique_id():
 		current_hovered_cell = aLoad.opponent.local_to_map(aLoad.opponent.get_local_mouse_position())
 		if current_hovered_cell.x >= 0 and current_hovered_cell.x < 10 and current_hovered_cell.y >= 0 and current_hovered_cell.y < 10:
@@ -73,7 +73,7 @@ func clear_layer(layer, tilemap):
 	if tilemap == "you":
 		for kol in range(0,10):
 			for row in range(0, 10):
-				$you.set_cell(layer, Vector2i(kol, row), -1)
+				aLoad.yourTilemap.set_cell(layer, Vector2i(kol, row), -1)
 	elif tilemap == "opponent":
 		for kol in range(0,10):
 			for row in range(0, 10):
@@ -111,7 +111,7 @@ func remove_boat(cell):
 		for j in i:
 			if j.x == cell.x and j.y == cell.y:
 				for k in i:
-					$you.set_cell(1, k, 0, Vector2i(-1, -1))
+					aLoad.yourTilemap.set_cell(1, k, 0, Vector2i(-1, -1))
 				aLoad.boats.pop_at(count)
 				match len(i):
 					2:
@@ -130,10 +130,11 @@ func remove_boat(cell):
 		count += 1
 
 func cell_valid(cell):
-	if $you.get_cell_source_id(1,cell) == -1 and cell.x >= 0 and cell.x < 10 and cell.y >= 0 and cell.y < 10:
+	if aLoad.yourTilemap.get_cell_source_id(1,cell) == -1 and cell.x >= 0 and cell.x < 10 and cell.y >= 0 and cell.y < 10:
+		print("cell valid")
 		return true
 
-
+#deprecated
 func place_boat(cell, length, preview):
 	var modifer = 0
 	var layer = 1
@@ -159,11 +160,11 @@ func place_boat(cell, length, preview):
 		
 		for i in length:
 			if i == 0:
-				$you.set_cell(layer, Vector2i(cell.x + (i + modifer), cell.y), 0, Vector2i(0,0))
+				aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x + (i + modifer), cell.y), 0, Vector2i(0,0))
 			elif i == length - 1:
-				$you.set_cell(layer, Vector2i(cell.x + (i + modifer), cell.y), 0, Vector2i(2,0))
+				aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x + (i + modifer), cell.y), 0, Vector2i(2,0))
 			else:
-				$you.set_cell(layer, Vector2i(cell.x + (i + modifer), cell.y), 0, Vector2i(1,0))
+				aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x + (i + modifer), cell.y), 0, Vector2i(1,0))
 			
 			boatCells.append(Vector2i(cell.x + (i + modifer), cell.y))
 		
@@ -174,11 +175,11 @@ func place_boat(cell, length, preview):
 		
 		for i in length:
 			if i == 0:
-				$you.set_cell(layer, Vector2i(cell.x, cell.y + (i + modifer)), 0, Vector2i(0,1))
+				aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y + (i + modifer)), 0, Vector2i(0,1))
 			elif i == length - 1:
-				$you.set_cell(layer, Vector2i(cell.x, cell.y + (i + modifer)), 0, Vector2i(2,1))
+				aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y + (i + modifer)), 0, Vector2i(2,1))
 			else:
-				$you.set_cell(layer, Vector2i(cell.x, cell.y + (i + modifer)), 0, Vector2i(1,1))
+				aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y + (i + modifer)), 0, Vector2i(1,1))
 			
 			boatCells.append(Vector2i(cell.x, cell.y + (i + modifer)))
 	if not preview:
@@ -194,16 +195,17 @@ func small_boat(cell, layer):
 				return false
 			else:
 				boatcells.append(Vector2i(cell.x + i, cell.y))
-		$you.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(0,0))
-		$you.set_cell(layer, Vector2i(cell.x + 1, cell.y), 0, Vector2i(2,0))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(0,0))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x + 1, cell.y), 0, Vector2i(2,0))
+		print("cells got placed")
 	elif direction == "VERTICAL":
 		for i in range(0, 2):
 			if not cell_valid(Vector2i(cell.x, cell.y + i)):
 				return false
 			else:
 				boatcells.append(Vector2i(cell.x, cell.y + i))
-		$you.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(0,1))
-		$you.set_cell(layer, Vector2i(cell.x, cell.y + 1), 0, Vector2i(2,1))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(0,1))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y + 1), 0, Vector2i(2,1))
 	
 	if layer == 1:
 		aLoad.boats.append(boatcells)
@@ -217,18 +219,18 @@ func medium_boat(cell, layer):
 				return false
 			else:
 				boatcells.append(Vector2i(cell.x + i, cell.y))
-		$you.set_cell(layer, Vector2i(cell.x - 1, cell.y), 0, Vector2i(0,0))
-		$you.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(1,0))
-		$you.set_cell(layer, Vector2i(cell.x + 1, cell.y), 0, Vector2i(2,0))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x - 1, cell.y), 0, Vector2i(0,0))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(1,0))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x + 1, cell.y), 0, Vector2i(2,0))
 	elif direction == "VERTICAL":
 		for i in range(-1, 2):
 			if not cell_valid(Vector2i(cell.x, cell.y + i)):
 				return false
 			else:
 				boatcells.append(Vector2i(cell.x, cell.y + i))
-		$you.set_cell(layer, Vector2i(cell.x, cell.y - 1), 0, Vector2i(0,1))
-		$you.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(1,1))
-		$you.set_cell(layer, Vector2i(cell.x, cell.y + 1), 0, Vector2i(2,1))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y - 1), 0, Vector2i(0,1))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(1,1))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y + 1), 0, Vector2i(2,1))
 	
 	if layer == 1:
 		aLoad.boats.append(boatcells)
@@ -242,20 +244,20 @@ func large_boat(cell, layer):
 				return false
 			else:
 				boatcells.append(Vector2i(cell.x + i, cell.y))
-		$you.set_cell(layer, Vector2i(cell.x - 1, cell.y), 0, Vector2i(0,0))
-		$you.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(1,0))
-		$you.set_cell(layer, Vector2i(cell.x + 1, cell.y), 0, Vector2i(1,0))
-		$you.set_cell(layer, Vector2i(cell.x + 2, cell.y), 0, Vector2i(2,0))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x - 1, cell.y), 0, Vector2i(0,0))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(1,0))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x + 1, cell.y), 0, Vector2i(1,0))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x + 2, cell.y), 0, Vector2i(2,0))
 	elif direction == "VERTICAL":
 		for i in range(-1, 3):
 			if not cell_valid(Vector2i(cell.x, cell.y + i)):
 				return false
 			else:
 				boatcells.append(Vector2i(cell.x, cell.y + i))
-		$you.set_cell(layer, Vector2i(cell.x, cell.y - 1), 0, Vector2i(0,1))
-		$you.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(1,1))
-		$you.set_cell(layer, Vector2i(cell.x, cell.y + 1), 0, Vector2i(1,1))
-		$you.set_cell(layer, Vector2i(cell.x, cell.y + 2), 0, Vector2i(2,1))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y - 1), 0, Vector2i(0,1))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(1,1))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y + 1), 0, Vector2i(1,1))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y + 2), 0, Vector2i(2,1))
 	
 	if layer == 1:
 		aLoad.boats.append(boatcells)
@@ -269,36 +271,39 @@ func extra_large_boat(cell, layer):
 				return false
 			else:
 				boatcells.append(Vector2i(cell.x + i, cell.y))
-		$you.set_cell(layer, Vector2i(cell.x - 2, cell.y), 0, Vector2i(0,0))
-		$you.set_cell(layer, Vector2i(cell.x - 1, cell.y), 0, Vector2i(1,0))
-		$you.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(1,0))
-		$you.set_cell(layer, Vector2i(cell.x + 1, cell.y), 0, Vector2i(1,0))
-		$you.set_cell(layer, Vector2i(cell.x + 2, cell.y), 0, Vector2i(2,0))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x - 2, cell.y), 0, Vector2i(0,0))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x - 1, cell.y), 0, Vector2i(1,0))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(1,0))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x + 1, cell.y), 0, Vector2i(1,0))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x + 2, cell.y), 0, Vector2i(2,0))
 	elif direction == "VERTICAL":
 		for i in range(-2, 3):
 			if not cell_valid(Vector2i(cell.x, cell.y + i)):
 				return false
 			else:
 				boatcells.append(Vector2i(cell.x, cell.y + i))
-		$you.set_cell(layer, Vector2i(cell.x, cell.y - 2), 0, Vector2i(0,1))
-		$you.set_cell(layer, Vector2i(cell.x, cell.y - 1), 0, Vector2i(1,1))
-		$you.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(1,1))
-		$you.set_cell(layer, Vector2i(cell.x, cell.y + 1), 0, Vector2i(1,1))
-		$you.set_cell(layer, Vector2i(cell.x, cell.y + 2), 0, Vector2i(2,1))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y - 2), 0, Vector2i(0,1))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y - 1), 0, Vector2i(1,1))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y), 0, Vector2i(1,1))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y + 1), 0, Vector2i(1,1))
+		aLoad.yourTilemap.set_cell(layer, Vector2i(cell.x, cell.y + 2), 0, Vector2i(2,1))
 	
 	if layer == 1:
 		aLoad.boats.append(boatcells)
 	return true
 
-@rpc("any_peer", "call_local", "reliable")
+@rpc("authority", "call_local", "reliable")
 func start_pregame():
 	aLoad.gameloop = "pregame"
 	aLoad.GUI.get_node("boat_select_menu").set_visible(true)
 	aLoad.top_gui.get_node("Label").set_text("Place your boats")
 	$AnimationPlayer.play("boards_in")
-	var sender_id = multiplayer.get_remote_sender_id()
-	aLoad.user_turn = sender_id
-	print("opponents name is " + aLoad.opponentName)
+	
+	for i in len(aLoad.players):
+		aLoad.players[i][2] = aLoad.boards[i]
+		if aLoad.players[i][1] == multiplayer.get_unique_id():
+			aLoad.yourPosition = i
+	aLoad.yourTilemap = aLoad.players[aLoad.yourPosition][2]
 
 
 @rpc("authority", "call_local", "reliable")
@@ -309,8 +314,6 @@ func start_game():
 	else:
 		aLoad.top_gui.get_node("Label").set_text("It's " + aLoad.opponentName + " turn")
 	print("game has started")
-	print(aLoad.playerName + " boats")
-	print(aLoad.boats)
 
 
 #TODO this code has to be checked and refactored again. It's a mess
@@ -328,7 +331,7 @@ func guess_boat(guess):
 			for cell in boats:
 				if cell.x == guess.x and cell.y == guess.y:
 					hit_or_miss.rpc(true, guess)
-					$you.set_cell(2, guess, 1, Vector2i(0, 0))
+					aLoad.yourTilemap.set_cell(2, guess, 1, Vector2i(0, 0))
 					aLoad.user_turn = multiplayer.get_unique_id()
 					aLoad.boats[index_1].pop_at(index_2)
 					#check if the list of cells is empty so we can remove the boat
@@ -344,7 +347,7 @@ func guess_boat(guess):
 			index_1 += 1
 		
 		aLoad.user_turn = multiplayer.get_unique_id()
-		$you.set_cell(2, guess, 1, Vector2i(1, 0))
+		aLoad.yourTilemap.set_cell(2, guess, 1, Vector2i(1, 0))
 		hit_or_miss.rpc(false, guess)
 
 
@@ -362,3 +365,7 @@ func hit_or_miss(hit, guess):
 func win(id):
 	aLoad.win_gui.win_or_lose(id)
 	aLoad.gameloop = "game_over"
+
+@rpc("authority", "call_remote", "reliable")
+func board(board):
+	pass

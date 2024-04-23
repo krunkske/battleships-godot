@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://lhyscxmrud3j" path="res://assets/sprites/ships/ship_tileset.png" id="1_3uji6"]
 [ext_resource type="Texture2D" uid="uid://cmb1xvlkk5ymw" path="res://assets/sprites/ships/pins_tileset.png" id="2_o36vh"]
-[ext_resource type="Texture2D" uid="uid://cn16qqialywgf" path="res://assets/sprites/ships/empty_tiles.png" id="3_hy3ck"]
+[ext_resource type="Texture2D" uid="uid://bltqhk3h8dng8" path="res://assets/sprites/empty_tiles.png" id="3_m66t1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dh2jd"]
 texture = ExtResource("1_3uji6")
@@ -18,12 +18,14 @@ texture = ExtResource("2_o36vh")
 0:0/0 = 0
 1:0/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sfyut"]
-texture = ExtResource("3_hy3ck")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bvmc4"]
+texture = ExtResource("3_m66t1")
 0:0/0 = 0
 1:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
 
 [resource]
 sources/0 = SubResource("TileSetAtlasSource_dh2jd")
-sources/2 = SubResource("TileSetAtlasSource_sfyut")
 sources/1 = SubResource("TileSetAtlasSource_2c4eq")
+sources/4 = SubResource("TileSetAtlasSource_bvmc4")

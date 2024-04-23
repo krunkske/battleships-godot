@@ -6,10 +6,10 @@ extends Node
 @onready var boat_select_GUI = GUI.get_node("boat_select_menu")
 @onready var win_gui = GUI.get_node("win_GUI")
 @onready var lobby_UI = GUI.get_node("lobby_UI")
-@onready var you = main.get_node("you")
-@onready var player2 = main.get_node("player2")
-@onready var player3 = main.get_node("player3")
-@onready var player4 = main.get_node("player4")
+@onready var board1 = main.get_node("board1")
+@onready var board2 = main.get_node("board2")
+@onready var board3 = main.get_node("board3")
+@onready var board4 = main.get_node("board4")
 
 @onready var selected_boat = "small"
 
@@ -20,28 +20,17 @@ extends Node
 
 @onready var user_turn = 1
 
-@onready var playerName = "Player 1"
-@onready var player2name = "Player 2"
-@onready var player3name = "Player 3"
-@onready var player4name = "Player 4"
+@onready var players = [] #[name, id, board, ready]
+@onready var yourPosition = -1
+@onready var yourTilemap = null
 
-@onready var youReady = false
-@onready var player2ready = false
-@onready var player3ready = false
-@onready var player4ready = false
-
+@onready var boards = [board1, board2, board3, board4]
 
 func reset():
-	Lobby.terminate()
+	multiplayer.multiplayer_peer = null
 	gameloop = "main_menu"
 	boats_placed = [0,0,0,0]
 	boats = []
-	youReady = false
-	player2ready = false
-	playerName = "Player 1"
-	player2name = "Player 2"
-	player3name = "Player 3"
-	player4name = "Player 4"
 	user_turn = 1
 	selected_boat = "small"
 	

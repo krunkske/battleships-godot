@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://b5t8qvex1tfxf"]
+[gd_scene load_steps=3 format=3 uid="uid://b5t8qvex1tfxf"]
 
 [ext_resource type="Theme" uid="uid://bmq24vi5uw0mq" path="res://assets/themes/default_theme.tres" id="1_gbuir"]
+[ext_resource type="Script" path="res://scripts/top_gui.gd" id="1_q501c"]
 
 [node name="top_gui" type="Control"]
 layout_mode = 3
@@ -8,6 +9,7 @@ anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
 size_flags_vertical = 0
+script = ExtResource("1_q501c")
 
 [node name="host_or_client" type="Label" parent="."]
 layout_mode = 0
@@ -15,6 +17,7 @@ offset_right = 40.0
 offset_bottom = 23.0
 theme = ExtResource("1_gbuir")
 theme_override_font_sizes/font_size = 24
+text = "clien"
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1
@@ -26,5 +29,17 @@ offset_right = 20.0
 offset_bottom = 23.0
 grow_horizontal = 2
 theme = ExtResource("1_gbuir")
-text = "
-"
+text = "temp"
+
+[node name="start" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -8.0
+offset_bottom = 8.0
+grow_horizontal = 0
+theme = ExtResource("1_gbuir")
+text = "start"
+
+[connection signal="pressed" from="start" to="." method="_on_start_pressed"]
