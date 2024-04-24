@@ -12,7 +12,7 @@ func _process(delta):
 
 
 func _on_host_pressed():
-	aLoad.players.append([$Panel/VBoxContainer/HBoxContainer2/name.get_text(), 0, null, false])
+	aLoad.players.append([$Panel/VBoxContainer/HBoxContainer2/name.get_text(), 1, null, false])
 	aLoad.yourPosition = 0
 	Lobby.PORT = $Panel/VBoxContainer/HBoxContainer4/port.text
 	Lobby.create_server()

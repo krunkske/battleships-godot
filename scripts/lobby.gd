@@ -68,15 +68,19 @@ func _server_disconnected():
 func _register_player(username):
 	aLoad.players.append([username, multiplayer.get_remote_sender_id(), null, false])
 	if multiplayer.is_server():
-		recieve_players.rpc_id(multiplayer.get_remote_sender_id(), aLoad.players)
+		recieve_players.rpc(aLoad.players)
 	print("playerList " + str(multiplayer.get_unique_id()) + " : " + str(aLoad.players))
 
 #gets response back from server to add all of the existing players to the players array
 @rpc("authority", "call_remote", "reliable")
 func recieve_players(users):
+	aLoad.players = users
+	var i = 0
 	for user in users:
-		aLoad.players.append(user)
-	aLoad.yourPosition = len(users)
+		if user[1] == multiplayer.get_unique_id():
+			aLoad.yourPosition = i
+			return
+		i += 1
 	print("playerList " + str(multiplayer.get_unique_id()) + " : " + str(aLoad.players))
 
 @rpc("any_peer", "call_remote", "reliable")

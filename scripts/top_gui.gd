@@ -14,3 +14,4 @@ func _process(delta):
 func _on_start_pressed():
 	if multiplayer.is_server():
 		aLoad.main.start_pregame.rpc()
+		self.set_visible(false)

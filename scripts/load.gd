@@ -27,17 +27,25 @@ extends Node
 @onready var boards = [board1, board2, board3, board4]
 
 func reset():
+	
+	main.clear_all_layers()
+	
 	multiplayer.multiplayer_peer = null
-	gameloop = "main_menu"
+	selected_boat = "small"
 	boats_placed = [0,0,0,0]
 	boats = []
+	gameloop = "main_menu"
 	user_turn = 1
-	selected_boat = "small"
+	players = []
+	yourPosition = -1
+	yourTilemap = null
+	boards = [board1, board2, board3, board4]
 	
 	main.get_node("AnimationPlayer").play("RESET")
 	lobby_UI.set_visible(true)
 	top_gui.get_node("host_or_client").text = ""
 	top_gui.get_node("Label").text = ""
+	
 	
 	main.clear_layer(1, "you")
 	main.clear_layer(2, "you")
