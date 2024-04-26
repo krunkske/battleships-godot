@@ -187,11 +187,9 @@ layer_3/tile_data = PackedInt32Array()
 
 [node name="Area2D" type="Area2D" parent="board1"]
 position = Vector2(10.0001, 10)
-scale = Vector2(1, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="board1/Area2D"]
 position = Vector2(69.9999, 70)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_pgpei")
 
 [node name="board2" type="TileMap" parent="."]
@@ -210,11 +208,9 @@ layer_3/modulate = Color(1, 1, 1, 0.392157)
 layer_3/tile_data = PackedInt32Array()
 
 [node name="Area2D2" type="Area2D" parent="board2"]
-scale = Vector2(1, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="board2/Area2D2"]
 position = Vector2(80, 80)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_bhley")
 
 [node name="board3" type="TileMap" parent="."]
@@ -233,11 +229,9 @@ layer_3/modulate = Color(1, 1, 1, 0.392157)
 layer_3/tile_data = PackedInt32Array()
 
 [node name="Area2D3" type="Area2D" parent="board3"]
-scale = Vector2(1, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="board3/Area2D3"]
 position = Vector2(80, 80)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_crde5")
 
 [node name="board4" type="TileMap" parent="."]
@@ -256,11 +250,9 @@ layer_3/modulate = Color(1, 1, 1, 0.392157)
 layer_3/tile_data = PackedInt32Array()
 
 [node name="Area2D4" type="Area2D" parent="board4"]
-scale = Vector2(1, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="board4/Area2D4"]
 position = Vector2(80, 80)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_1pwqa")
 
 [node name="GUI" type="Node" parent="."]
