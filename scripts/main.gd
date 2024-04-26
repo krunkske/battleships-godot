@@ -4,6 +4,10 @@ var direction = "HORIZONTAL"
 var last_hovered_cell
 var current_hovered_cell
 var current_hovered_board
+var screen_size
+
+var boardTweens = []
+var boardsEndPos = [] 
 
 #not used yet but should prob do in the future
 const water_layer = 0
@@ -12,11 +16,17 @@ const  pins_layer = 2
 const preview_layer = 3
 
 func _ready():
+	
 	#aLoad.you.global_position = (get_viewport().get_visible_rect().size/2) - Vector2(200,200) + get_viewport().get_visible_rect().size/5
 	#aLoad.opponent.global_position = (get_viewport().get_visible_rect().size/2) - Vector2(200,200) - get_viewport().get_visible_rect().size/5
-	for i in range(1, 5):
-		self.get_node("AnimationPlayer" + str(i)).play("RESET")
 	current_hovered_board = $board1
+	
+	screen_size = get_viewport().get_visible_rect().size
+	#size of a board  is 320 by 320, should stick out 20px and should be 32px from the edges of the screen
+	boardsEndPos = [Vector2(32, 32), Vector2(screen_size.x - 352, screen_size.y - 352),  Vector2(screen_size.x - 352, 32), Vector2(32, screen_size.y - 352)] #clockwise
+	
+	reset_boards()
+
 
 func _process(delta):
 	if aLoad.gameloop == "pregame":
@@ -54,6 +64,22 @@ func _process(delta):
 			current_hovered_cell = aLoad.yourTilemap.local_to_map(aLoad.yourTilemap.get_local_mouse_position())
 			last_hovered_cell = current_hovered_cell
 			preview(current_hovered_cell)
+
+func create_tweens():
+	for i in len(aLoad.players):
+		var tween = get_tree().create_tween()
+		tween.set_trans(Tween.TRANS_CUBIC)
+		tween.tween_property(aLoad.players[i][2], "position", boardsEndPos[i], 1.0)
+		tween.stop()
+		boardTweens.append(tween)
+
+func reset_boards():
+	clear_all_layers()
+	
+	$board1.position = Vector2(-300,32)
+	$board2.position = Vector2(screen_size.x - 20, screen_size.y - 352)
+	$board3.position = Vector2(screen_size.x - 20, 32)
+	$board4.position = Vector2(-300, screen_size.y - 352)
 
 #previews a boat on the preview layer
 #params: cell to start at
@@ -314,9 +340,9 @@ func start_pregame():
 	aLoad.yourTilemap = aLoad.players[aLoad.yourPosition][2]
 	
 	#plays the animations for the boards fading in
-	for i in len(aLoad.players):
-		print("played board" + str(i+1) + "_in")
-		self.get_node("AnimationPlayer" + str(i+1)).play("board_in")
+	create_tweens()
+	for i in boardTweens:
+		i.play()
 	
 	print("playerList " + str(multiplayer.get_unique_id()) + " : " + str(aLoad.players))
 

@@ -27,7 +27,7 @@ grow_horizontal = 2
 [node name="HSeparator2" type="HSeparator" parent="GridContainer"]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
-theme_override_constants/separation = 100
+theme_override_constants/separation = 50
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GridContainer"]
 layout_mode = 2

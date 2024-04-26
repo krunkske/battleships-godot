@@ -1,7 +1,8 @@
-[gd_scene load_steps=23 format=3 uid="uid://duyqiactcy4sl"]
+[gd_scene load_steps=12 format=3 uid="uid://duyqiactcy4sl"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_7bs27"]
 [ext_resource type="TileSet" uid="uid://x4aouaoehrm1" path="res://assets/sprites/tileset.tres" id="2_cdwms"]
+[ext_resource type="Texture2D" uid="uid://cbega3sso4nam" path="res://icon.svg" id="3_x00jf"]
 [ext_resource type="PackedScene" uid="uid://db6nesat63ie2" path="res://scenes/boat_select_menu.tscn" id="4_wajcg"]
 [ext_resource type="PackedScene" uid="uid://b5t8qvex1tfxf" path="res://scenes/top_gui.tscn" id="5_cxnur"]
 [ext_resource type="PackedScene" uid="uid://c45gsict2hygl" path="res://scenes/win_gui.tscn" id="5_r1e5o"]
@@ -19,160 +20,12 @@ size = Vector2(160, 160)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1pwqa"]
 size = Vector2(160, 160)
 
-[sub_resource type="Animation" id="Animation_tqapj"]
-resource_name = "RESET"
-length = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("board1:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1068, 646)]
-}
-
-[sub_resource type="Animation" id="Animation_nh42y"]
-resource_name = "board_in"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("board1:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(0.2, 0.2),
-"update": 0,
-"values": [Vector2(1068, 646), Vector2(648, 646)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_ulwq5"]
-_data = {
-"RESET": SubResource("Animation_tqapj"),
-"board_in": SubResource("Animation_nh42y")
-}
-
-[sub_resource type="Animation" id="Animation_n70b3"]
-resource_name = "RESET"
-length = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("board2:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-390, 32)]
-}
-
-[sub_resource type="Animation" id="Animation_jdxhh"]
-resource_name = "board_in"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("board2:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(0.2, 0.2),
-"update": 0,
-"values": [Vector2(-390, 32), Vector2(32, 32)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_sdwrb"]
-_data = {
-"RESET": SubResource("Animation_n70b3"),
-"board_in": SubResource("Animation_jdxhh")
-}
-
-[sub_resource type="Animation" id="Animation_onasw"]
-resource_name = "RESET"
-length = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("board3:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-390, 646)]
-}
-
-[sub_resource type="Animation" id="Animation_if8rk"]
-resource_name = "board_in"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("board3:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(0.2, 0.2),
-"update": 0,
-"values": [Vector2(-390, 646), Vector2(32, 646)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_q4abw"]
-_data = {
-"RESET": SubResource("Animation_onasw"),
-"board_in": SubResource("Animation_if8rk")
-}
-
-[sub_resource type="Animation" id="Animation_slyj3"]
-resource_name = "RESET"
-length = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("board4:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1068, 32)]
-}
-
-[sub_resource type="Animation" id="Animation_qu6ev"]
-resource_name = "board_in"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("board4:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(0.2, 0.2),
-"update": 0,
-"values": [Vector2(1068, 32), Vector2(648, 32)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_8uqbh"]
-_data = {
-"RESET": SubResource("Animation_slyj3"),
-"board_in": SubResource("Animation_qu6ev")
-}
-
 [node name="main" type="Node"]
 script = ExtResource("1_7bs27")
 
 [node name="board1" type="TileMap" parent="."]
-position = Vector2(1068, 646)
-scale = Vector2(2.5, 2.5)
+position = Vector2(-300, 32)
+scale = Vector2(2, 2)
 tile_set = ExtResource("2_cdwms")
 format = 2
 layer_0/name = "water"
@@ -192,9 +45,25 @@ position = Vector2(10.0001, 10)
 position = Vector2(69.9999, 70)
 shape = SubResource("RectangleShape2D_pgpei")
 
+[node name="user_icon" type="TextureRect" parent="board1"]
+offset_left = 170.0
+offset_right = 210.0
+offset_bottom = 40.0
+texture = ExtResource("3_x00jf")
+expand_mode = 1
+
+[node name="username" type="Label" parent="board1"]
+offset_left = 170.0
+offset_top = 45.0
+offset_right = 210.0
+offset_bottom = 68.0
+text = "Player 1"
+visible_characters = 20
+visible_ratio = 2.85714
+
 [node name="board2" type="TileMap" parent="."]
-position = Vector2(-390, 32)
-scale = Vector2(2.5, 2.5)
+position = Vector2(1260, 32)
+scale = Vector2(2, 2)
 tile_set = ExtResource("2_cdwms")
 format = 2
 layer_0/name = "water"
@@ -213,9 +82,24 @@ layer_3/tile_data = PackedInt32Array()
 position = Vector2(80, 80)
 shape = SubResource("RectangleShape2D_bhley")
 
+[node name="user_icon" type="TextureRect" parent="board2"]
+offset_left = -50.0
+offset_right = -10.0
+offset_bottom = 40.0
+texture = ExtResource("3_x00jf")
+expand_mode = 1
+
+[node name="username" type="Label" parent="board2"]
+offset_left = -50.0
+offset_top = 45.0
+offset_right = 12.0
+offset_bottom = 68.0
+text = "Player 2"
+visible_characters = 20
+
 [node name="board3" type="TileMap" parent="."]
-position = Vector2(-390, 646)
-scale = Vector2(2.5, 2.5)
+position = Vector2(1260, 368)
+scale = Vector2(2, 2)
 tile_set = ExtResource("2_cdwms")
 format = 2
 layer_0/name = "water"
@@ -234,9 +118,23 @@ layer_3/tile_data = PackedInt32Array()
 position = Vector2(80, 80)
 shape = SubResource("RectangleShape2D_crde5")
 
+[node name="user_icon" type="TextureRect" parent="board3"]
+offset_left = -50.0
+offset_right = -10.0
+offset_bottom = 40.0
+texture = ExtResource("3_x00jf")
+expand_mode = 2
+
+[node name="username" type="Label" parent="board3"]
+offset_left = -50.0
+offset_top = 45.0
+offset_right = 12.0
+offset_bottom = 68.0
+text = "Player 3"
+
 [node name="board4" type="TileMap" parent="."]
-position = Vector2(1068, 32)
-scale = Vector2(2.5, 2.5)
+position = Vector2(-300, 368)
+scale = Vector2(2, 2)
 tile_set = ExtResource("2_cdwms")
 format = 2
 layer_0/name = "water"
@@ -255,6 +153,20 @@ layer_3/tile_data = PackedInt32Array()
 position = Vector2(80, 80)
 shape = SubResource("RectangleShape2D_1pwqa")
 
+[node name="user_icon" type="TextureRect" parent="board4"]
+offset_left = 170.0
+offset_right = 210.0
+offset_bottom = 40.0
+texture = ExtResource("3_x00jf")
+expand_mode = 1
+
+[node name="username" type="Label" parent="board4"]
+offset_left = 170.0
+offset_top = 45.0
+offset_right = 232.0
+offset_bottom = 68.0
+text = "Player 4"
+
 [node name="GUI" type="Node" parent="."]
 
 [node name="win_GUI" parent="GUI" instance=ExtResource("5_r1e5o")]
@@ -269,26 +181,6 @@ anchor_bottom = 0.0
 grow_vertical = 1
 
 [node name="lobby_UI" parent="GUI" instance=ExtResource("6_qph72")]
-
-[node name="AnimationPlayer1" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_ulwq5")
-}
-
-[node name="AnimationPlayer2" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_sdwrb")
-}
-
-[node name="AnimationPlayer3" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_q4abw")
-}
-
-[node name="AnimationPlayer4" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_8uqbh")
-}
 
 [connection signal="mouse_entered" from="board1/Area2D" to="." method="mouse_board_1"]
 [connection signal="mouse_entered" from="board2/Area2D2" to="." method="mouse_board_2"]
