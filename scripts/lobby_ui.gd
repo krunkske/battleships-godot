@@ -12,7 +12,8 @@ func _process(delta):
 
 
 func _on_host_pressed():
-	aLoad.playerName = $Panel/VBoxContainer/HBoxContainer2/name.get_text()
+	aLoad.players.append([$Panel/VBoxContainer/HBoxContainer2/name.get_text(), 1, null, false])
+	aLoad.yourPosition = 0
 	Lobby.PORT = $Panel/VBoxContainer/HBoxContainer4/port.text
 	Lobby.create_server()
 	self.set_visible(false)
@@ -20,10 +21,10 @@ func _on_host_pressed():
 
 func _on_join_pressed():
 	if $"Panel/VBoxContainer/HBoxContainer2/ip-adress".get_text().is_valid_ip_address():
-		aLoad.playerName = $Panel/VBoxContainer/HBoxContainer2/name.get_text()
+		Lobby.playerName = $Panel/VBoxContainer/HBoxContainer2/name.get_text()
 		$Panel/VBoxContainer/HBoxContainer4/port.text
-		if aLoad.playerName == "Player 1":
-			aLoad.playerName = "Player 2"
+		if Lobby.playerName == "Player 1":
+			Lobby.playerName = "Player 2"
 		Lobby.create_client($"Panel/VBoxContainer/HBoxContainer2/ip-adress".get_text())
 		self.set_visible(false)
 
