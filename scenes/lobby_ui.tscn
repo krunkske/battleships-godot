@@ -97,7 +97,7 @@ theme_override_constants/separation = 120
 
 [node name="port" type="LineEdit" parent="Panel/VBoxContainer/HBoxContainer4"]
 layout_mode = 2
-text = "1026"
+text = "8080"
 placeholder_text = "Port"
 alignment = 1
 editable = false

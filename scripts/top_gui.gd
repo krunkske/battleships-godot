@@ -12,6 +12,6 @@ func _process(delta):
 
 
 func _on_start_pressed():
-	if multiplayer.is_server():
-		aLoad.main.start_pregame.rpc()
+	if multiplayer.is_server() or aLoad.authorized:
+		Lobby.is_authorized.rpc_id(1)
 		self.set_visible(false)

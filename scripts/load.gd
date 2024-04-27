@@ -20,11 +20,23 @@ extends Node
 
 @onready var user_turn = 1
 
-@onready var players = [] #[name, id, board, ready]
+@onready var players = []
+
 @onready var yourPosition = -1
 @onready var yourTilemap = null
+@onready var authorized = false
 
-@onready var boards = [board1, board2, board3, board4]
+@onready var boards = [board1, board2, board3, board4] #deprecated but still used, preferably use player_dict
+
+#only for server
+@onready var headless = false
+
+@onready var player_boats = [
+	{"id": 0, "boats": []},
+	{"id": 0, "boats": []},
+	{"id": 0, "boats": []},
+	{"id": 0, "boats": []},
+]
 
 func reset():
 	
@@ -41,15 +53,17 @@ func reset():
 	yourTilemap = null
 	boards = [board1, board2, board3, board4]
 	
-	main.get_node("AnimationPlayer").play("RESET")
+	player_boats = [
+	{"id": 0, "boats": []},
+	{"id": 0, "boats": []},
+	{"id": 0, "boats": []},
+	{"id": 0, "boats": []},
+]
+	
 	lobby_UI.set_visible(true)
 	top_gui.get_node("host_or_client").text = ""
 	top_gui.get_node("Label").text = ""
 	
-	
-	main.clear_layer(1, "you")
-	main.clear_layer(2, "you")
-	main.clear_layer(2, "opponent")
 	
 	boat_select_GUI.set_visible(false)
 	boat_select_GUI.set_value("small", 1)

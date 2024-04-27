@@ -29,9 +29,9 @@ func _on_ready_pressed():
 		self.set_visible(false)
 		aLoad.top_gui.get_node("Label").set_text("Waiting for opponents")
 		if not multiplayer.is_server():
-			Lobby.is_ready.rpc_id(1, aLoad.yourPosition)
+			Lobby.is_ready.rpc_id(1, aLoad.yourPosition, aLoad.boats)
 		else:
-			Lobby.is_ready(aLoad.yourPosition)
+			Lobby.is_ready(aLoad.yourPosition, aLoad.boats)
 	else:
 		aLoad.top_gui.get_node("Label").set_text("You have not placed all your boats")
 

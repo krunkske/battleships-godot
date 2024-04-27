@@ -12,67 +12,77 @@ var boardsEndPos = []
 #not used yet but should prob do in the future
 const water_layer = 0
 const ships_layer = 1
-const  pins_layer = 2
+const pins_layer = 2
 const preview_layer = 3
 
+#ready
 func _ready():
-	
-	#aLoad.you.global_position = (get_viewport().get_visible_rect().size/2) - Vector2(200,200) + get_viewport().get_visible_rect().size/5
-	#aLoad.opponent.global_position = (get_viewport().get_visible_rect().size/2) - Vector2(200,200) - get_viewport().get_visible_rect().size/5
-	current_hovered_board = $board1
-	
-	screen_size = get_viewport().get_visible_rect().size
-	#size of a board  is 320 by 320, should stick out 20px and should be 32px from the edges of the screen
-	boardsEndPos = [Vector2(32, 32), Vector2(screen_size.x - 352, screen_size.y - 352),  Vector2(screen_size.x - 352, 32), Vector2(32, screen_size.y - 352)] #clockwise
-	
-	reset_boards()
+	if OS.has_feature("dedicated_server"):
+		aLoad.headless = true
+		Lobby.create_server("")
+	#server doesnt need to know or have the boards, only all of the ships positions
+	if not aLoad.headless:
+		current_hovered_board = $board1
+		
+		screen_size = get_viewport().get_visible_rect().size
+		#size of a board  is 320 by 320, should stick out 20px and should be 32px from the edges of the screen
+		boardsEndPos = [Vector2(32, 32), Vector2(screen_size.x - 352, screen_size.y - 352),  Vector2(screen_size.x - 352, 32), Vector2(32, screen_size.y - 352)] #clockwise
+		
+		reset_boards()
 
-
+#process
 func _process(delta):
-	if aLoad.gameloop == "pregame":
-		preview(aLoad.yourTilemap.local_to_map(aLoad.yourTilemap.get_local_mouse_position()))
-		
-		if Input.is_action_just_pressed("LmouseButton"):
-			add_boat(aLoad.yourTilemap.local_to_map(aLoad.yourTilemap.get_local_mouse_position()))
-		elif Input.is_action_just_pressed("RmouseButton"):
-			remove_boat(aLoad.yourTilemap.local_to_map(aLoad.yourTilemap.get_local_mouse_position()))
-	
-	elif aLoad.gameloop == "game" and aLoad.user_turn == multiplayer.get_unique_id():
-		if Input.is_action_just_pressed("LmouseButton"):
-			var place = current_hovered_board.local_to_map(current_hovered_board.get_local_mouse_position())
-			if current_hovered_board.get_cell_source_id(2, place) == -1:
-				if place.x >= 0 and place.x < 10 and place.y >= 0 and place.y < 10:
-					guess_boat.rpc_id(get_list_from_board(current_hovered_board)[1], place)
-					clear_layer(3, "opponent")
-		
-		if current_hovered_board != aLoad.yourTilemap:
-			current_hovered_cell = current_hovered_board.local_to_map(current_hovered_board.get_local_mouse_position())
-			if cell_within_bounds(current_hovered_cell):
-				if current_hovered_cell != last_hovered_cell:
-					last_hovered_cell = current_hovered_cell
-					clear_layer(3, "opponent")
-					current_hovered_board.set_cell(3 , Vector2i(current_hovered_cell.x, current_hovered_cell .y), 1, Vector2i(1,0))
-			else:
-				clear_layer(3, "opponent")
-	
-	if Input.is_action_just_pressed("change_direction"):
-		if direction == "HORIZONTAL":
-			direction = "VERTICAL"
-		else:
-			direction = "HORIZONTAL"
+	#server doesnt need to do all of this
+	if not aLoad.headless:
 		if aLoad.gameloop == "pregame":
-			current_hovered_cell = aLoad.yourTilemap.local_to_map(aLoad.yourTilemap.get_local_mouse_position())
-			last_hovered_cell = current_hovered_cell
-			preview(current_hovered_cell)
+			preview(aLoad.yourTilemap.local_to_map(aLoad.yourTilemap.get_local_mouse_position()))
+			
+			if Input.is_action_just_pressed("LmouseButton"):
+				add_boat(aLoad.yourTilemap.local_to_map(aLoad.yourTilemap.get_local_mouse_position()))
+			elif Input.is_action_just_pressed("RmouseButton"):
+				remove_boat(aLoad.yourTilemap.local_to_map(aLoad.yourTilemap.get_local_mouse_position()))
+		
+		elif aLoad.gameloop == "game" and aLoad.user_turn == multiplayer.get_unique_id():
+			if Input.is_action_just_pressed("LmouseButton"):
+				var place = current_hovered_board.local_to_map(current_hovered_board.get_local_mouse_position())
+				if current_hovered_board.get_cell_source_id(2, place) == -1:
+					if place.x >= 0 and place.x < 10 and place.y >= 0 and place.y < 10:
+						if multiplayer.get_unique_id() == 1:
+							guess_boat(get_id_from_board(current_hovered_board), place)
+						else:
+							guess_boat.rpc_id(1, get_id_from_board(current_hovered_board), place)
+						clear_layer(3, "opponent")
+			
+			if current_hovered_board != aLoad.yourTilemap:
+				current_hovered_cell = current_hovered_board.local_to_map(current_hovered_board.get_local_mouse_position())
+				if cell_within_bounds(current_hovered_cell):
+					if current_hovered_cell != last_hovered_cell:
+						last_hovered_cell = current_hovered_cell
+						clear_layer(3, "opponent")
+						current_hovered_board.set_cell(3 , Vector2i(current_hovered_cell.x, current_hovered_cell .y), 1, Vector2i(1,0))
+				else:
+					clear_layer(3, "opponent")
+		
+		if Input.is_action_just_pressed("change_direction"):
+			if direction == "HORIZONTAL":
+				direction = "VERTICAL"
+			else:
+				direction = "HORIZONTAL"
+			if aLoad.gameloop == "pregame":
+				current_hovered_cell = aLoad.yourTilemap.local_to_map(aLoad.yourTilemap.get_local_mouse_position())
+				last_hovered_cell = current_hovered_cell
+				preview(current_hovered_cell)
 
+#create all tweens for the animations
 func create_tweens():
 	for i in len(aLoad.players):
 		var tween = get_tree().create_tween()
 		tween.set_trans(Tween.TRANS_CUBIC)
-		tween.tween_property(aLoad.players[i][2], "position", boardsEndPos[i], 1.0)
+		tween.tween_property(aLoad.players[i].board, "position", boardsEndPos[i], 1.0)
 		tween.stop()
 		boardTweens.append(tween)
 
+#resets all the boards
 func reset_boards():
 	clear_all_layers()
 	
@@ -118,8 +128,8 @@ func clear_all_layers():
 	for user in aLoad.players:
 		for kol in range(0,10):
 			for row in range(0, 10):
-				user[2].set_cell(1, Vector2i(kol, row), -1)
-				user[2].set_cell(2, Vector2i(kol, row), -1)
+				user.board.set_cell(1, Vector2i(kol, row), -1)
+				user.board.set_cell(2, Vector2i(kol, row), -1)
 
 #adds a specified boat to your tilemap and changes the boats_placed array
 func add_boat(cell):
@@ -292,34 +302,30 @@ func extra_large_boat(cell, layer):
 #TODO see if neccesary
 func get_list_from_id(id):
 	for i in aLoad.players:
-		if i[1] == id:
+		if i.id == id:
 			return i
 
 #gets the list of a player by the given board of that player
 #TODO see if neccesary
-func get_list_from_board(board):
+func get_id_from_board(board):
 	for i in aLoad.players:
-		if i[2] == board:
-			return i
+		if i.board == board:
+			return i.id
 
 #returns the next user who is allowed to place a boat by the previous users id
 func next_user_turn(id):
 	var valid_players = []
 	for i in aLoad.players:
-		if i[3]:
+		if i.ready:
 			valid_players.append(i)
-	
-	print(str(multiplayer.get_unique_id()) + str(valid_players))
 	
 	var next = false
 	for i in valid_players:
 		if next:
-			print(i[1])
-			return i[1]
-		if i[1] == id and i[3]:
+			return i.id
+		if i.id == id:
 			next = true
-
-	return aLoad.players[0][1]
+	return aLoad.players[0].id
 
 
 #MULTIPLAYER FUNCTIONS
@@ -330,87 +336,104 @@ func next_user_turn(id):
 @rpc("authority", "call_local", "reliable")
 func start_pregame():
 	aLoad.gameloop = "pregame"
-	aLoad.GUI.get_node("boat_select_menu").set_visible(true)
-	aLoad.top_gui.get_node("Label").set_text("Place your boats")
-	#fills in the missing variables in the playerlist like your position in the list and the players board
-	for i in len(aLoad.players):
-		aLoad.players[i][2] = aLoad.boards[i]
-		if aLoad.players[i][1] == multiplayer.get_unique_id():
-			aLoad.yourPosition = i
-	aLoad.yourTilemap = aLoad.players[aLoad.yourPosition][2]
 	
-	#plays the animations for the boards fading in
-	create_tweens()
-	for i in boardTweens:
-		i.play()
+	for i in len(aLoad.players):
+		aLoad.players[i].board = aLoad.boards[i]
 	
 	print("playerList " + str(multiplayer.get_unique_id()) + " : " + str(aLoad.players))
+	
+	if not aLoad.headless:
+		aLoad.GUI.get_node("boat_select_menu").set_visible(true)
+		aLoad.top_gui.get_node("Label").set_text("Place your boats")
+		
+		#fills in the missing variables in the playerlist like your position in the list and the players board
+		for i in len(aLoad.players):
+			if aLoad.players[i].id == multiplayer.get_unique_id():
+				aLoad.yourPosition = i
+		
+		aLoad.yourTilemap = aLoad.players[aLoad.yourPosition].board
+		
+		#plays the animations for the boards fading in
+		create_tweens()
+		for i in boardTweens:
+			i.play()
 
 #starts the game
 #called by the server when everyone has placed its boats and is ready to start the gameloop
 @rpc("authority", "call_local", "reliable")
 func start_game():
-	aLoad.user_turn = 1
+	aLoad.user_turn = aLoad.players[0].id
 	aLoad.gameloop = "game"
-	#makes sure that all of the ready bariables in the playerlist are ste to true bc we repurpose them later
-	for i in len(aLoad.players):
-		aLoad.players[i][3] = true
-	#host advantage by making him go first kinda dunno
-	if aLoad.user_turn == multiplayer.get_unique_id():
-		aLoad.top_gui.get_node("Label").set_text("It's your turn")
+	#makes sure that all of the ready variables in the playerlist are ste to true bc we repurpose them later
+	
+	if not aLoad.headless:
+		for i in len(aLoad.players):
+			aLoad.players[i].ready = true
+		#host advantage by making him go first kinda dunno
+		if aLoad.user_turn == multiplayer.get_unique_id():
+			aLoad.top_gui.get_node("Label").set_text("It's your turn")
+		else:
+			aLoad.top_gui.get_node("Label").set_text("It's turn")
 	else:
-		aLoad.top_gui.get_node("Label").set_text("It's turn")
+		print(aLoad.player_boats)
 
 
 #TODO this code has to be checked and refactored again. It's a mess
 #DONE but still shit and i don't care
 @rpc("any_peer", "call_remote", "reliable")
-func guess_boat(guess):
+func guess_boat(player_id, guess):
 	#get sender id first and check if it is the opponents turn and if the cell is withing the grid
 	var sender_id = multiplayer.get_remote_sender_id()
-	if sender_id == aLoad.user_turn and guess.x >= 0 and guess.x < 10 and guess.y >= 0 and guess.y < 10:
-		aLoad.top_gui.get_node("Label").set_text(" guessed " + str(guess.x) + ", " + str(guess.y))
+	if sender_id == 0:
+		sender_id = 1
 	
+	if sender_id == aLoad.user_turn and guess.x >= 0 and guess.x < 10 and guess.y >= 0 and guess.y < 10:
+		if not aLoad.headless:
+			aLoad.top_gui.get_node("Label").set_text(" guessed " + str(guess.x) + ", " + str(guess.y))
+
+		var boatlist = []
+		var playerindex = 0
+		for i in aLoad.player_boats:
+			if i.id == player_id:
+				boatlist = i.boats
+				break
+			playerindex += 1
+		
 		var index_1 = 0
-		for boats in aLoad.boats:
+		for boat in boatlist:
 			var index_2 = 0
-			for cell in boats:
+			for cell in boat:
 				if cell.x == guess.x and cell.y == guess.y:
-					hit_or_miss.rpc(true, guess, multiplayer.get_remote_sender_id())
-					aLoad.yourTilemap.set_cell(2, guess, 1, Vector2i(0, 0))
-					aLoad.user_turn = next_user_turn(multiplayer.get_remote_sender_id())
-					if aLoad.user_turn == multiplayer.get_unique_id():
-						aLoad.top_gui.get_node("Label").set_text("It's your turn")
-					aLoad.boats[index_1].pop_at(index_2)
-					#check if the list of cells is empty so we can remove the boat
-					if aLoad.boats[index_1] == []:
-						aLoad.boats.pop_at(index_1)
-					#check if the list of boats is empty to see if the opponent has won
-					if aLoad.boats == []:
-						player_out.rpc(aLoad.yourPosition)
+					aLoad.user_turn = next_user_turn(sender_id)
+					hit_or_miss.rpc(true, player_id, guess, aLoad.user_turn)
+					
+					aLoad.player_boats[playerindex].boats[index_1].pop_at(index_2)
+					
+					if aLoad.player_boats[playerindex].boats[index_1] == []:
+						print("popped boat from list")
+						aLoad.player_boats[playerindex].boats.pop_at(index_1)
+					if aLoad.player_boats[playerindex].boats == []:
+						print(str(player_id) + " is out.")
+						player_out.rpc(player_id)
 					return
-				
 				index_2 += 1
-			
 			index_1 += 1
 		
-		aLoad.yourTilemap.set_cell(2, guess, 1, Vector2i(1, 0))
-		hit_or_miss.rpc(false, guess, multiplayer.get_remote_sender_id())
-		aLoad.user_turn = next_user_turn(multiplayer.get_remote_sender_id())
+		aLoad.user_turn = next_user_turn(sender_id)
+		hit_or_miss.rpc(false, player_id, guess, aLoad.user_turn)
 		if aLoad.user_turn == multiplayer.get_unique_id():
 			aLoad.top_gui.get_node("Label").set_text("It's your turn")
 
 
-@rpc("any_peer", "call_remote", "reliable")
-func hit_or_miss(hit, guess, guesser):
-	var sender = get_list_from_id(multiplayer.get_remote_sender_id())
-	aLoad.user_turn = next_user_turn(guesser)
-	
+@rpc("authority", "call_local", "reliable")
+func hit_or_miss(hit, guessed_at_player, guess, Next_user_turn):
+	var sender = get_list_from_id(guessed_at_player)
+	aLoad.user_turn = Next_user_turn
+
 	if hit:
-		sender[2].set_cell(2, guess, 1, Vector2i(0, 0))
+		sender.board.set_cell(pins_layer, guess, 1, Vector2i(0, 0))
 	else:
-		if guess.x >= 0 and guess.x < 10 and guess.y >= 0 and guess.y < 10:
-			sender[2].set_cell(2, guess, 1, Vector2i(1, 0))
+		sender.board.set_cell(pins_layer, guess, 1, Vector2i(1, 0))
 	
 	if aLoad.user_turn == multiplayer.get_unique_id():
 		aLoad.top_gui.get_node("Label").set_text("It's your turn")
@@ -418,23 +441,40 @@ func hit_or_miss(hit, guess, guesser):
 		aLoad.top_gui.get_node("Label").set_text(" guessed " + str(guess.x) + ", " + str(guess.y))
 
 
-@rpc("any_peer", "call_local", "reliable")
+@rpc("authority", "call_local", "reliable")
 func win(id):
-	aLoad.win_gui.win_or_lose(id)
+	if not aLoad.headless:
+		aLoad.win_gui.win_or_lose(id)
 	aLoad.gameloop = "game_over"
 
-@rpc("any_peer", "call_local", "reliable")
-func player_out(pos):
-	aLoad.players[pos][3] = false
+@rpc("authority", "call_local", "reliable")
+func lose():
+	aLoad.win_gui.win_or_lose(-1)
+
+@rpc("authority", "call_local", "reliable")
+func player_out(player_id):
+	print("player " + str(player_id) + " out")
+	if multiplayer.is_server():
+		lose.rpc_id(player_id)
 	var count = 0
-	var winning_player_id = 0
 	for i in aLoad.players:
+		if i.id == player_id:
+			aLoad.players[count].ready = false
+			break
+		count += 1
+	count = 0
+	var winning_player_id = 0
+	for player in aLoad.players:
+		print(player)
+		if player.ready:
+			count += 1
+			winning_player_id = player.id
+		
 		if count > 1:
 			return
-		if i[3]:
-			count += 1
-			winning_player_id = i[1]
-	win.rpc(winning_player_id)
+	
+	if multiplayer.is_server():
+		win.rpc(winning_player_id)
 
 func mouse_board_1():
 	if len(aLoad.players) >= 1:
