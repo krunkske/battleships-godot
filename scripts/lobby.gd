@@ -23,7 +23,7 @@ func _ready():
 
 
 func create_client(ip_address):
-	if ip_address == "":
+	if ip_address == "" or OS.has_feature("dedicated_server"):
 		ip_address = "wss://1232998495733153843.discordsays.com/server"
 	else:
 		ip_address = ip_address + ":8080"
