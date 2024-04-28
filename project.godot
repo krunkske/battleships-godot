@@ -29,7 +29,7 @@ window/size/resizable=false
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/coi_serviceworker/plugin.cfg", "res://addons/godot_colyseus/plugin.cfg")
+enabled=PackedStringArray()
 
 [input]
 

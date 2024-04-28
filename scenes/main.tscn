@@ -60,7 +60,7 @@ offset_bottom = 68.0
 text = "Player 1"
 
 [node name="board2" type="TileMap" parent="."]
-position = Vector2(1260, 32)
+position = Vector2(1260, 367)
 scale = Vector2(2, 2)
 tile_set = ExtResource("2_cdwms")
 format = 2
@@ -97,7 +97,7 @@ visible_characters = 20
 visible_ratio = 2.5
 
 [node name="board3" type="TileMap" parent="."]
-position = Vector2(1260, 368)
+position = Vector2(1260, 32)
 scale = Vector2(2, 2)
 tile_set = ExtResource("2_cdwms")
 format = 2

@@ -11,6 +11,11 @@ extends Node
 @onready var board3 = main.get_node("board3")
 @onready var board4 = main.get_node("board4")
 
+@onready var usernameNode1 = board1.get_node("username")
+@onready var usernameNode2 = board2.get_node("username")
+@onready var usernameNode3 = board3.get_node("username")
+@onready var usernameNode4 = board4.get_node("username")
+
 @onready var selected_boat = "small"
 
 @onready var boats_placed = [0,0,0,0] #from 2 to 5, left to right
@@ -28,6 +33,7 @@ extends Node
 
 @onready var boards = [board1, board2, board3, board4] #deprecated but still used, preferably use player_dict
 
+@onready var usernamesNodes = [usernameNode1, usernameNode2, usernameNode3, usernameNode4]
 #only for server
 @onready var headless = false
 

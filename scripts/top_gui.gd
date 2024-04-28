@@ -12,6 +12,10 @@ func _process(delta):
 
 
 func _on_start_pressed():
-	if multiplayer.is_server() or aLoad.authorized:
+	if multiplayer.is_server():
+		aLoad.authorized = 1
+		Lobby.is_authorized()
+		self.set_visible(false)
+	elif aLoad.authorized:
 		Lobby.is_authorized.rpc_id(1)
 		self.set_visible(false)

@@ -8,6 +8,7 @@ var screen_size
 
 var boardTweens = []
 var boardsEndPos = [] 
+var boardBackPos = []
 
 #not used yet but should prob do in the future
 const water_layer = 0
@@ -26,7 +27,9 @@ func _ready():
 		
 		screen_size = get_viewport().get_visible_rect().size
 		#size of a board  is 320 by 320, should stick out 20px and should be 32px from the edges of the screen
-		boardsEndPos = [Vector2(32, 32), Vector2(screen_size.x - 352, screen_size.y - 352),  Vector2(screen_size.x - 352, 32), Vector2(32, screen_size.y - 352)] #clockwise
+		boardsEndPos = [Vector2(32, 32), Vector2(screen_size.x - 352, screen_size.y - 352),  Vector2(screen_size.x - 352, 32), Vector2(32, screen_size.y - 352)] #clockwise kinda
+		#board 1 and 2 dont really matter bc they will always be there
+		boardBackPos = [Vector2(-500, 32), Vector2(screen_size.x + 500,screen_size.y - 352), Vector2(screen_size.x + 100 ,32), Vector2(-320-100,screen_size.y - 352)]
 		
 		reset_boards()
 
@@ -81,7 +84,10 @@ func create_tweens():
 		tween.tween_property(aLoad.players[i].board, "position", boardsEndPos[i], 1.0)
 		tween.stop()
 		boardTweens.append(tween)
-
+	for i in range(len(aLoad.players), 4):
+		var tween = get_tree().create_tween()
+		tween.set_trans(Tween.TRANS_CUBIC)
+		tween.tween_property(aLoad.boards[i], "position", boardBackPos[i], 1.0)
 #resets all the boards
 func reset_boards():
 	clear_all_layers()
@@ -357,6 +363,9 @@ func start_pregame():
 		create_tweens()
 		for i in boardTweens:
 			i.play()
+		
+		for i in range(len(aLoad.players), 4):
+			aLoad.usernamesNodes[i].text = ""
 
 #starts the game
 #called by the server when everyone has placed its boats and is ready to start the gameloop

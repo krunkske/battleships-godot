@@ -66,7 +66,6 @@ theme = ExtResource("1_pjmqm")
 text = "127.0.0.1"
 placeholder_text = " IP adress "
 alignment = 1
-expand_to_text_length = true
 
 [node name="VSeparator" type="VSeparator" parent="Panel/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
@@ -80,7 +79,6 @@ theme = ExtResource("1_pjmqm")
 text = "Player 1"
 placeholder_text = "name"
 alignment = 1
-expand_to_text_length = true
 
 [node name="HBoxContainer4" type="HBoxContainer" parent="Panel/VBoxContainer"]
 layout_mode = 2
