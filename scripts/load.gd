@@ -30,7 +30,7 @@ extends Node
 
 @onready var yourPosition = -1
 @onready var yourTilemap = null
-@onready var authorized = false
+@onready var authorized = 1
 
 @onready var boards = [board1, board2, board3, board4] #deprecated but still used, preferably use player_dict
 

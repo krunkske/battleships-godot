@@ -66,7 +66,8 @@ func create_server(Name):
 		aLoad.top_container_box.get_node("Label").set_text("Waiting for opponents.")
 		aLoad.top_container_box.get_node("start").set_visible(true)
 		
-	
+	else:
+		aLoad.authorized = 1
 	multiplayer.multiplayer_peer = peer
 
 
@@ -132,7 +133,6 @@ func _register_player(username):
 @rpc("authority", "call_local", "reliable")
 func recieve_players(users, authorized):
 	if authorized:
-		aLoad.authorized = true
 		aLoad.top_container_box.get_node("start").set_visible(true)
 	aLoad.players = users
 	var i = 0

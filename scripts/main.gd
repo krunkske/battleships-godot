@@ -317,7 +317,6 @@ func extra_large_boat(cell, layer):
 	return true
 
 #gets the list of a player by the given id of that player
-#TODO see if neccesary
 func get_list_from_id(id):
 	for i in aLoad.players:
 		if i.id == id:
@@ -460,7 +459,7 @@ func hit_or_miss(hit, guessed_at_player, guess, Next_user_turn):
 	if aLoad.user_turn == multiplayer.get_unique_id():
 		aLoad.top_container_box.get_node("Label").set_text("It's your turn")
 	elif guessed_at_player == multiplayer.get_unique_id():
-		aLoad.top_container_box.get_node("Label").set_text(get_list_from_id("You guessed " + str(guess.x) + ", " + str(guess.y)))
+		aLoad.top_container_box.get_node("Label").set_text("You guessed " + str(guess.x) + ", " + str(guess.y))
 	else:
 		aLoad.top_container_box.get_node("Label").set_text(get_list_from_id(aLoad.user_turn).name + " guessed " + str(guess.x) + ", " + str(guess.y))
 
