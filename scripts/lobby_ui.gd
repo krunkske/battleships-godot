@@ -1,5 +1,6 @@
 extends Control
 
+var tween
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -17,11 +18,19 @@ func _ready():
 func _process(delta):
 	pass
 
+func create_tweens():
+	tween = get_tree().create_tween()
+	tween.set_trans(Tween.TRANS_SPRING)
+	tween.tween_property($Panel, "scale", Vector2(0,0), 0.4)
+	tween.tween_callback(self.hide)
 
 func _on_host_pressed():
 	Lobby.PORT = $Panel/VBoxContainer/HBoxContainer4/port.text
 	Lobby.create_server($Panel/VBoxContainer/HBoxContainer2/name.text)
-	self.set_visible(false)
+	aLoad.usernamesNodes[0].text = $Panel/VBoxContainer/HBoxContainer2/name.text
+	aLoad.boards[0].fade_in()
+	create_tweens()
+	
 
 
 func _on_join_pressed():
@@ -30,7 +39,7 @@ func _on_join_pressed():
 		if not Lobby.create_client($"Panel/VBoxContainer/HBoxContainer2/ip-adress".get_text()):
 			aLoad.top_gui.get_node("Label").set_text("Could not connect to server.")
 		else:
-			self.set_visible(false)
+			create_tweens()
 
 
 func _on_port_toggled(toggled_on):

@@ -1,0 +1,45 @@
+[gd_scene load_steps=5 format=3 uid="uid://cmm6sobngrmm2"]
+
+[ext_resource type="TileSet" uid="uid://x4aouaoehrm1" path="res://assets/sprites/tileset.tres" id="1_vlo5i"]
+[ext_resource type="Script" path="res://scripts/board.gd" id="2_miibo"]
+[ext_resource type="Texture2D" uid="uid://cbega3sso4nam" path="res://icon.svg" id="4_0jkq3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wjwbn"]
+size = Vector2(160, 160)
+
+[node name="board" type="TileMap"]
+tile_set = ExtResource("1_vlo5i")
+format = 2
+layer_0/name = "water"
+layer_1/name = "ships"
+layer_1/tile_data = PackedInt32Array()
+layer_2/name = "pins"
+layer_2/tile_data = PackedInt32Array()
+layer_3/name = "preview"
+layer_3/modulate = Color(1, 1, 1, 0.392157)
+layer_3/tile_data = PackedInt32Array()
+script = ExtResource("2_miibo")
+
+[node name="Area2D" type="Area2D" parent="."]
+self_modulate = Color(1, 1, 1, 0.25098)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(80, 80)
+shape = SubResource("RectangleShape2D_wjwbn")
+
+[node name="user_icon" type="TextureRect" parent="."]
+offset_left = 170.0
+offset_right = 210.0
+offset_bottom = 40.0
+texture = ExtResource("4_0jkq3")
+expand_mode = 1
+
+[node name="username" type="Label" parent="."]
+offset_left = 170.0
+offset_top = 45.0
+offset_right = 219.0
+offset_bottom = 68.0
+size_flags_horizontal = 4
+text = "Player"
+
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]

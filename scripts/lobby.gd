@@ -35,7 +35,7 @@ func create_client(ip_address):
 		return false
 	multiplayer.multiplayer_peer = peer
 	aLoad.top_gui.get_node("host_or_client").set_text("client")
-	aLoad.top_gui.get_node("Label").set_text("Waiting for Host.")
+	aLoad.top_container_box.get_node("Label").set_text("Waiting for Host.")
 	return true
 
 
@@ -47,10 +47,10 @@ func create_server(Name):
 		match err:
 			22:
 				print("could not create server. Another server is already running")
-				aLoad.top_gui.get_node("Label").set_text("could not create server. Another server is already running")
+				aLoad.top_container_box.get_node("Label").set_text("could not create server. Another server is already running")
 			_:
 				print("could not create server.")
-				aLoad.top_gui.get_node("Label").set_text("could not create server.")
+				aLoad.top_container_box.get_node("Label").set_text("could not create server.")
 			
 		aLoad.reset()
 		return
@@ -63,7 +63,9 @@ func create_server(Name):
 		connected += 1
 		
 		aLoad.top_gui.get_node("host_or_client").set_text("host: " + Name)
-		aLoad.top_gui.get_node("Label").set_text("Waiting for opponents.")
+		aLoad.top_container_box.get_node("Label").set_text("Waiting for opponents.")
+		aLoad.top_container_box.get_node("start").set_visible(true)
+		
 	
 	multiplayer.multiplayer_peer = peer
 
@@ -89,7 +91,7 @@ func _connected_ok():
 func _connected_fail():
 	aLoad.reset()
 	print("connection failed.")
-	aLoad.top_gui.get_node("Label").set_text("Connection Failed")
+	aLoad.top_container_box.get_node("Label").set_text("Connection Failed")
 	
 
 func _player_disconnected(_id):
@@ -108,14 +110,13 @@ func _player_disconnected(_id):
 func _server_disconnected():
 	print("server disconnected.")
 	aLoad.reset()
-	aLoad.top_gui.get_node("Label").set_text("Server disconnected")
+	aLoad.top_container_box.get_node("Label").set_text("Server disconnected")
 
 #registers a new player and adds it to the ist of players
 #called on every client except sender
 @rpc("any_peer", "call_remote", "reliable")
 func _register_player(username):
 	aLoad.players.append({"name": username, "id": multiplayer.get_remote_sender_id(), "board": null, "ready": false})
-	aLoad.boards[connected].get_node("username").text = username
 	if multiplayer.is_server():
 		if connected == 1 and aLoad.headless:
 			aLoad.authorized = multiplayer.get_remote_sender_id()
@@ -128,10 +129,11 @@ func _register_player(username):
 	print(str(multiplayer.get_unique_id()) + " : " + str(aLoad.players))
 
 #gets response back from server to add all of the existing players to the players array
-@rpc("authority", "call_remote", "reliable")
+@rpc("authority", "call_local", "reliable")
 func recieve_players(users, authorized):
 	if authorized:
 		aLoad.authorized = true
+		aLoad.top_container_box.get_node("start").set_visible(true)
 	aLoad.players = users
 	var i = 0
 	for user in users:
@@ -142,6 +144,7 @@ func recieve_players(users, authorized):
 	i = 0
 	for user in users:
 		aLoad.usernamesNodes[i].text = user.name
+		aLoad.boards[i].fade_in()
 		i += 1
 
 	print("playerList " + str(multiplayer.get_unique_id()) + " : " + str(aLoad.players))
@@ -160,5 +163,7 @@ func is_ready(index, boats):
 
 @rpc("any_peer", "call_remote", "reliable")
 func is_authorized():
-	if multiplayer.get_remote_sender_id() == 1 or multiplayer.get_remote_sender_id() == aLoad.authorized:
+	if aLoad.headless and multiplayer.get_remote_sender_id() == aLoad.authorized:
+		aLoad.main.start_pregame.rpc()
+	elif not aLoad.headless and multiplayer.is_server():
 		aLoad.main.start_pregame.rpc()

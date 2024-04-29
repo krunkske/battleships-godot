@@ -3,6 +3,7 @@ extends Node
 @onready var main = get_tree().root.get_node("main")
 @onready var GUI = main.get_node("GUI")
 @onready var top_gui = GUI.get_node("top_gui")
+@onready var top_container_box = top_gui.get_node("VBoxContainer")
 @onready var boat_select_GUI = GUI.get_node("boat_select_menu")
 @onready var win_gui = GUI.get_node("win_GUI")
 @onready var lobby_UI = GUI.get_node("lobby_UI")
@@ -67,8 +68,10 @@ func reset():
 ]
 	
 	lobby_UI.set_visible(true)
+	lobby_UI.tween.kill()
+	lobby_UI.get_node("Panel").scale = Vector2(1,1)
 	top_gui.get_node("host_or_client").text = ""
-	top_gui.get_node("Label").text = ""
+	top_container_box.get_node("Label").text = ""
 	
 	
 	boat_select_GUI.set_visible(false)

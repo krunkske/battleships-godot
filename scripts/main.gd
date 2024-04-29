@@ -48,7 +48,7 @@ func _process(delta):
 		elif aLoad.gameloop == "game" and aLoad.user_turn == multiplayer.get_unique_id():
 			if Input.is_action_just_pressed("LmouseButton"):
 				var place = current_hovered_board.local_to_map(current_hovered_board.get_local_mouse_position())
-				if current_hovered_board.get_cell_source_id(2, place) == -1:
+				if current_hovered_board.get_cell_source_id(2, place) == -1 and current_hovered_board != aLoad.yourTilemap:
 					if place.x >= 0 and place.x < 10 and place.y >= 0 and place.y < 10:
 						if multiplayer.get_unique_id() == 1:
 							guess_boat(get_id_from_board(current_hovered_board), place)
@@ -88,6 +88,7 @@ func create_tweens():
 		var tween = get_tree().create_tween()
 		tween.set_trans(Tween.TRANS_CUBIC)
 		tween.tween_property(aLoad.boards[i], "position", boardBackPos[i], 1.0)
+
 #resets all the boards
 func reset_boards():
 	clear_all_layers()
@@ -96,6 +97,17 @@ func reset_boards():
 	$board2.position = Vector2(screen_size.x - 20, screen_size.y - 352)
 	$board3.position = Vector2(screen_size.x - 20, 32)
 	$board4.position = Vector2(-300, screen_size.y - 352)
+
+func set_hovered_board(Name):
+	match Name:
+		"board1":
+			current_hovered_board = aLoad.board1
+		"board2":
+			current_hovered_board = aLoad.board2
+		"board3":
+			current_hovered_board = aLoad.board3
+		"board4":
+			current_hovered_board = aLoad.board4
 
 #previews a boat on the preview layer
 #params: cell to start at
@@ -349,8 +361,9 @@ func start_pregame():
 	print("playerList " + str(multiplayer.get_unique_id()) + " : " + str(aLoad.players))
 	
 	if not aLoad.headless:
+		aLoad.GUI.get_node("boat_select_menu").fade_in()
 		aLoad.GUI.get_node("boat_select_menu").set_visible(true)
-		aLoad.top_gui.get_node("Label").set_text("Place your boats")
+		aLoad.top_container_box.get_node("Label").set_text("Place your boats")
 		
 		#fills in the missing variables in the playerlist like your position in the list and the players board
 		for i in len(aLoad.players):
@@ -380,9 +393,9 @@ func start_game():
 			aLoad.players[i].ready = true
 		#host advantage by making him go first kinda dunno
 		if aLoad.user_turn == multiplayer.get_unique_id():
-			aLoad.top_gui.get_node("Label").set_text("It's your turn")
+			aLoad.top_container_box.get_node("Label").set_text("It's your turn")
 		else:
-			aLoad.top_gui.get_node("Label").set_text("It's turn")
+			aLoad.top_container_box.get_node("Label").set_text("It's " + get_list_from_id(aLoad.user_turn).name + " turn")
 	else:
 		print(aLoad.player_boats)
 
@@ -398,7 +411,7 @@ func guess_boat(player_id, guess):
 	
 	if sender_id == aLoad.user_turn and guess.x >= 0 and guess.x < 10 and guess.y >= 0 and guess.y < 10:
 		if not aLoad.headless:
-			aLoad.top_gui.get_node("Label").set_text(" guessed " + str(guess.x) + ", " + str(guess.y))
+			aLoad.top_container_box.get_node("Label").set_text(" guessed " + str(guess.x) + ", " + str(guess.y))
 
 		var boatlist = []
 		var playerindex = 0
@@ -431,7 +444,7 @@ func guess_boat(player_id, guess):
 		aLoad.user_turn = next_user_turn(sender_id)
 		hit_or_miss.rpc(false, player_id, guess, aLoad.user_turn)
 		if aLoad.user_turn == multiplayer.get_unique_id():
-			aLoad.top_gui.get_node("Label").set_text("It's your turn")
+			aLoad.top_container_box.get_node("Label").set_text("It's your turn")
 
 
 @rpc("authority", "call_local", "reliable")
@@ -445,9 +458,11 @@ func hit_or_miss(hit, guessed_at_player, guess, Next_user_turn):
 		sender.board.set_cell(pins_layer, guess, 1, Vector2i(1, 0))
 	
 	if aLoad.user_turn == multiplayer.get_unique_id():
-		aLoad.top_gui.get_node("Label").set_text("It's your turn")
+		aLoad.top_container_box.get_node("Label").set_text("It's your turn")
+	elif guessed_at_player == multiplayer.get_unique_id():
+		aLoad.top_container_box.get_node("Label").set_text(get_list_from_id("You guessed " + str(guess.x) + ", " + str(guess.y)))
 	else:
-		aLoad.top_gui.get_node("Label").set_text(" guessed " + str(guess.x) + ", " + str(guess.y))
+		aLoad.top_container_box.get_node("Label").set_text(get_list_from_id(aLoad.user_turn).name + " guessed " + str(guess.x) + ", " + str(guess.y))
 
 
 @rpc("authority", "call_local", "reliable")
@@ -484,23 +499,6 @@ func player_out(player_id):
 	
 	if multiplayer.is_server():
 		win.rpc(winning_player_id)
-
-func mouse_board_1():
-	if len(aLoad.players) >= 1:
-		current_hovered_board = aLoad.board1
-
-func mouse_board_2():
-	if len(aLoad.players) >= 2:
-		current_hovered_board = aLoad.board2
-
-func mouse_board_3():
-	if len(aLoad.players) >= 3:
-		current_hovered_board = aLoad.board3
-
-func mouse_board_4():
-	if len(aLoad.players) >= 4:
-		current_hovered_board = aLoad.board4
-
 
 #deprecated
 func place_boat(cell, length, preview):
