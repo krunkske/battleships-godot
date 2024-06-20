@@ -12,12 +12,9 @@ tile_set = ExtResource("1_vlo5i")
 format = 2
 layer_0/name = "water"
 layer_1/name = "ships"
-layer_1/tile_data = PackedInt32Array()
 layer_2/name = "pins"
-layer_2/tile_data = PackedInt32Array()
 layer_3/name = "preview"
 layer_3/modulate = Color(1, 1, 1, 0.392157)
-layer_3/tile_data = PackedInt32Array()
 script = ExtResource("2_miibo")
 
 [node name="Area2D" type="Area2D" parent="."]

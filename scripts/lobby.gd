@@ -2,6 +2,8 @@ extends Node
 
 #the ENTIRE infrastructure has to be changed from peer to peer to server
 #good luck!
+#I did it! Yay!
+
 
 var PORT = 8080
 const MAX_CLIENTS = 3

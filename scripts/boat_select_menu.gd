@@ -45,7 +45,7 @@ func _on_ready_pressed():
 		else:
 			Lobby.is_ready(aLoad.yourPosition, aLoad.boats)
 	else:
-		aLoad.top_gui.get_node("Label").set_text("You have not placed all your boats")
+		aLoad.top_container_box.get_node("Label").set_text("You have not placed all your boats")
 
 func set_value(textBox, value):
 	match textBox:
